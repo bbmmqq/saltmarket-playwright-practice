@@ -57,7 +57,7 @@ async function refreshAuthArea() {
     `;
     document.getElementById('logout-btn').addEventListener('click', async () => {
       await api.post('/api/auth/logout');
-      window.location.href = '/index.html';
+      window.location.href = '/login.html';
     });
   } else {
     area.innerHTML = `<a href="/login.html" data-testid="login-link">Login</a>`;

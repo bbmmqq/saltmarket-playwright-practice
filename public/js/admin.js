@@ -3,8 +3,15 @@ let editingId = null;
 
 async function init() {
   const { data: user } = await api.get('/api/auth/me');
-  if (!user || !user.isAdmin) {
-    document.getElementById('admin-denied').hidden = false;
+  if (!user) {
+    window.location.href = '/login.html';
+    return;
+  }
+  if (!user.isAdmin) {
+    const denied = document.getElementById('admin-denied');
+    denied.querySelector('[data-testid="admin-denied-message"]').textContent =
+      "You're logged in, but this account doesn't have admin access.";
+    denied.hidden = false;
     return;
   }
   document.getElementById('admin-content').hidden = false;

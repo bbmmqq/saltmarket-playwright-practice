@@ -24,3 +24,7 @@ function money(n) {
 function qs(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
+
+function dashboardUrl(user) {
+  return user && user.isAdmin ? '/admin.html' : '/index.html';
+}

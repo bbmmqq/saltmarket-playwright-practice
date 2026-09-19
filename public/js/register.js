@@ -1,3 +1,10 @@
+(async () => {
+  const { data: user } = await api.get('/api/auth/me');
+  if (user) {
+    window.location.href = dashboardUrl(user);
+  }
+})();
+
 document.getElementById('register-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const errorEl = document.getElementById('register-error');
@@ -25,5 +32,5 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     return;
   }
 
-  window.location.href = '/index.html';
+  window.location.href = dashboardUrl(data);
 });
