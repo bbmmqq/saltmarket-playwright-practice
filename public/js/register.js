@@ -1,7 +1,7 @@
 (async () => {
   const { data: user } = await api.get('/api/auth/me');
   if (user) {
-    window.location.href = dashboardUrl(user);
+    window.location.href = qs('redirect') || dashboardUrl(user);
   }
 })();
 
@@ -32,5 +32,10 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     return;
   }
 
-  window.location.href = dashboardUrl(data);
+  window.location.href = qs('redirect') || dashboardUrl(data);
 });
+
+const loginLink = document.querySelector('[data-testid="go-to-login"]');
+if (loginLink && qs('redirect')) {
+  loginLink.href = `/login.html?redirect=${encodeURIComponent(qs('redirect'))}`;
+}

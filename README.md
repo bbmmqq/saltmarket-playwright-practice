@@ -91,7 +91,9 @@ Wipes the database (cart, orders, registered users, product stock) and re-seeds 
 | PATCH | `/api/admin/products/:id` | *(admin only)* Update a product |
 | DELETE | `/api/admin/products/:id` | *(admin only)* Delete a product (fails with 400 if it appears in existing orders) |
 
-The cart is tracked per-browser via an `sid` cookie, so it works without logging in (guest checkout). Admin routes are gated server-side by the logged-in user's `is_admin` flag — a non-admin gets a `403`.
+The whole storefront requires being logged in — visiting any shop page while logged out redirects to `/login.html?redirect=<original path>`, and logging in sends you back there. The cart itself is still tracked per-browser via an `sid` cookie, but the pages that expose it are all auth-gated client-side (the API layer is not; see note below). Admin routes are gated server-side by the logged-in user's `is_admin` flag — a non-admin gets a `403`.
+
+> **Note:** the login wall is enforced client-side (each shop page checks `/api/auth/me` on load and redirects if logged out). The underlying `/api/products`, `/api/cart`, etc. endpoints are not themselves auth-gated — this mirrors how a lot of real single-page apps enforce "must be logged in" at the UI layer. Keep that in mind if you write API-level Playwright tests: hitting the REST endpoints directly still works without a session.
 
 ## `data-testid` reference
 
@@ -120,6 +122,7 @@ Every interactive element carries a `data-testid` so Playwright locators don't d
 - Login with the seeded account, confirm the header switches to the logged-in state, then log out
 - Visit `/admin.html` while logged out or as a non-admin, confirm access is denied
 - Login as the admin, add a new product, edit its price/stock, then delete it and confirm it disappears from the catalog
+- Visit `/cart.html` (or any shop page) while logged out and confirm you're bounced to `/login.html?redirect=/cart.html`, then confirm logging in sends you back to `/cart.html`
 
 ---
 
