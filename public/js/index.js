@@ -5,6 +5,14 @@ let state = {
   page: 1,
 };
 
+const CATEGORY_EMOJI = {
+  Himalayan: '🏔️',
+  'Sea Salt': '🌊',
+  Gourmet: '✨',
+  'Cooking Basics': '🍳',
+  'Spa & Bath': '🛁',
+};
+
 async function loadCategories() {
   const { data: categories } = await api.get('/api/categories');
   const el = document.getElementById('category-filters');
@@ -13,7 +21,8 @@ async function loadCategories() {
     .map((c) => {
       const value = c === 'All' ? '' : c;
       const active = state.category === value ? 'active' : '';
-      return `<button class="category-btn ${active}" data-category="${value}" data-testid="category-btn">${c}</button>`;
+      const label = c === 'All' ? 'All' : `${CATEGORY_EMOJI[c] || '🧂'} ${c}`;
+      return `<button class="category-btn ${active}" data-category="${value}" data-testid="category-btn">${label}</button>`;
     })
     .join('');
 
