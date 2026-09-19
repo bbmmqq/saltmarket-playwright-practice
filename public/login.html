@@ -13,19 +13,22 @@
   <div id="site-header"></div>
 
   <main>
-    <h1>Login</h1>
-    <form id="login-form" class="stacked" novalidate>
-      <label>Email
-        <input name="email" type="email" data-testid="login-email" />
-      </label>
-      <label>Password
-        <input name="password" type="password" data-testid="login-password" />
-      </label>
-      <p class="error-text" id="login-error" data-testid="login-error" hidden></p>
-      <button type="submit" id="login-submit" data-testid="login-submit">Login</button>
-    </form>
-    <p>No account? <a href="/register.html" data-testid="go-to-register">Register</a></p>
-    <p style="color:#8a7d6b;font-size:0.85rem;">Test account: test@saltmarket.com / password123</p>
+    <div class="auth-card">
+      <h1>Welcome back</h1>
+      <form id="login-form" class="stacked" novalidate>
+        <label>Email
+          <input name="email" type="email" data-testid="login-email" />
+        </label>
+        <label>Password
+          <input name="password" type="password" data-testid="login-password" />
+        </label>
+        <p class="error-text" id="login-error" data-testid="login-error" hidden></p>
+        <button type="submit" id="login-submit" data-testid="login-submit">Login</button>
+      </form>
+      <p class="auth-footer">No account? <a href="/register.html" data-testid="go-to-register">Register</a></p>
+      <p class="auth-hint">Test account: <code>test@saltmarket.com</code> / <code>password123</code></p>
+      <p class="auth-hint">Admin account: <code>admin@saltmarket.com</code> / <code>admin123</code></p>
+    </div>
   </main>
 
   <div id="site-footer"></div>

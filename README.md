@@ -2,7 +2,7 @@
 
 A mock e-commerce store selling gourmet and culinary salt — built as a **target app for practicing Playwright test automation**, not a real store.
 
-It's a small but realistic online shop: product catalog with search/filter/sort, cart, coupon codes, checkout with validation, order confirmation, and login/register — all backed by a real PostgreSQL database.
+It's a small but realistic online shop: product catalog with search/filter/sort, cart, coupon codes, checkout with validation, order confirmation, login/register, and an admin dashboard for managing products — all backed by a real PostgreSQL database.
 
 ## Tech stack
 
@@ -48,10 +48,12 @@ npm run db:down     # stop the Postgres container
 | Order confirmation | `/confirmation.html?orderId=<id>` |
 | Login | `/login.html` |
 | Register | `/register.html` |
+| Admin dashboard | `/admin.html` (admin account only) |
 
 ## Test data
 
 - **Seeded login:** `test@saltmarket.com` / `password123`
+- **Seeded admin login:** `admin@saltmarket.com` / `admin123`
 - **Coupon codes:** `SALT10` (10% off), `WELCOME15` (15% off)
 - **Free shipping** kicks in once the discounted subtotal reaches $50
 - A couple of products are seeded **out of stock** (Maldon Sea Salt, Eucalyptus Bath Salt) and a couple are **low stock** (Black Truffle Salt, Himalayan Salt Block) — useful for edge-case tests
@@ -84,8 +86,12 @@ Wipes the database (cart, orders, registered users, product stock) and re-seeds 
 | POST | `/api/auth/logout` | Log out |
 | GET | `/api/auth/me` | Get the current logged-in user (or `null`) |
 | POST | `/api/reset` | Reset the database to seed data |
+| GET | `/api/admin/products` | *(admin only)* List all products |
+| POST | `/api/admin/products` | *(admin only)* Create a product |
+| PATCH | `/api/admin/products/:id` | *(admin only)* Update a product |
+| DELETE | `/api/admin/products/:id` | *(admin only)* Delete a product (fails with 400 if it appears in existing orders) |
 
-The cart is tracked per-browser via an `sid` cookie, so it works without logging in (guest checkout).
+The cart is tracked per-browser via an `sid` cookie, so it works without logging in (guest checkout). Admin routes are gated server-side by the logged-in user's `is_admin` flag — a non-admin gets a `403`.
 
 ## `data-testid` reference
 
@@ -101,6 +107,7 @@ Every interactive element carries a `data-testid` so Playwright locators don't d
 | Confirmation | `confirmation-title`, `order-id`, `order-total`, `continue-shopping-link` |
 | Login | `login-email`, `login-password`, `login-submit`, `login-error`, `go-to-register` |
 | Register | `register-name`, `register-email`, `register-password`, `register-confirm`, `register-submit`, `register-error`, `go-to-login` |
+| Admin | `admin-link` (header), `admin-denied`, `admin-add-form`, `admin-add-name`, `admin-add-category`, `admin-add-price`, `admin-add-stock`, `admin-add-unit`, `admin-add-emoji`, `admin-add-description`, `admin-add-submit`, `admin-add-error`, `admin-add-success`, `admin-product-table`, `admin-product-row`, `admin-product-name`, `admin-product-price`, `admin-product-stock`, `admin-edit-btn`, `admin-edit-name`, `admin-edit-category`, `admin-edit-price`, `admin-edit-stock`, `admin-edit-unit`, `admin-save-btn`, `admin-cancel-btn`, `admin-delete-btn`, `admin-table-error` |
 
 ## Suggested first tests
 
@@ -111,6 +118,8 @@ Every interactive element carries a `data-testid` so Playwright locators don't d
 - Complete a full checkout and land on the confirmation page with the right order number
 - Register with a duplicate email and confirm the error
 - Login with the seeded account, confirm the header switches to the logged-in state, then log out
+- Visit `/admin.html` while logged out or as a non-admin, confirm access is denied
+- Login as the admin, add a new product, edit its price/stock, then delete it and confirm it disappears from the catalog
 
 ---
 

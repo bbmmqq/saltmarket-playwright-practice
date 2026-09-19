@@ -14,8 +14,8 @@ async function insertSeedData(pool) {
   for (const u of seedUsers()) {
     const hash = await bcrypt.hash(u.password, 10);
     await pool.query(
-      `INSERT INTO users (id, name, email, password_hash) VALUES ($1,$2,$3,$4)`,
-      [u.id, u.name, u.email, hash]
+      `INSERT INTO users (id, name, email, password_hash, is_admin) VALUES ($1,$2,$3,$4,$5)`,
+      [u.id, u.name, u.email, hash, !!u.isAdmin]
     );
   }
   await pool.query(`SELECT setval('users_id_seq', (SELECT MAX(id) FROM users))`);

@@ -13,24 +13,26 @@
   <div id="site-header"></div>
 
   <main>
-    <h1>Create an account</h1>
-    <form id="register-form" class="stacked" novalidate>
-      <label>Name
-        <input name="name" type="text" data-testid="register-name" />
-      </label>
-      <label>Email
-        <input name="email" type="email" data-testid="register-email" />
-      </label>
-      <label>Password
-        <input name="password" type="password" data-testid="register-password" />
-      </label>
-      <label>Confirm password
-        <input name="confirm" type="password" data-testid="register-confirm" />
-      </label>
-      <p class="error-text" id="register-error" data-testid="register-error" hidden></p>
-      <button type="submit" id="register-submit" data-testid="register-submit">Create account</button>
-    </form>
-    <p>Already have an account? <a href="/login.html" data-testid="go-to-login">Login</a></p>
+    <div class="auth-card">
+      <h1>Create an account</h1>
+      <form id="register-form" class="stacked" novalidate>
+        <label>Name
+          <input name="name" type="text" data-testid="register-name" />
+        </label>
+        <label>Email
+          <input name="email" type="email" data-testid="register-email" />
+        </label>
+        <label>Password
+          <input name="password" type="password" data-testid="register-password" />
+        </label>
+        <label>Confirm password
+          <input name="confirm" type="password" data-testid="register-confirm" />
+        </label>
+        <p class="error-text" id="register-error" data-testid="register-error" hidden></p>
+        <button type="submit" id="register-submit" data-testid="register-submit">Create account</button>
+      </form>
+      <p class="auth-footer">Already have an account? <a href="/login.html" data-testid="go-to-login">Login</a></p>
+    </div>
   </main>
 
   <div id="site-footer"></div>

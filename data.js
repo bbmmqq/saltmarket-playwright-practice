@@ -26,7 +26,8 @@ function seedProducts() {
 
 function seedUsers() {
   return [
-    { id: 1, name: 'Test User', email: 'test@saltmarket.com', password: 'password123' },
+    { id: 1, name: 'Test User', email: 'test@saltmarket.com', password: 'password123', isAdmin: false },
+    { id: 2, name: 'Store Admin', email: 'admin@saltmarket.com', password: 'admin123', isAdmin: true },
   ];
 }
 

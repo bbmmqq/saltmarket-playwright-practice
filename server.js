@@ -30,8 +30,22 @@ function round2(n) {
 async function currentUser(req) {
   const uid = Number(req.cookies.uid);
   if (!uid) return null;
-  const { rows } = await pool.query('SELECT id, name, email FROM users WHERE id = $1', [uid]);
-  return rows[0] || null;
+  const { rows } = await pool.query('SELECT id, name, email, is_admin FROM users WHERE id = $1', [uid]);
+  if (!rows[0]) return null;
+  return { id: rows[0].id, name: rows[0].name, email: rows[0].email, isAdmin: rows[0].is_admin };
+}
+
+async function requireAdmin(req, res, next) {
+  try {
+    const user = await currentUser(req);
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function getCoupon(sid) {
@@ -297,12 +311,12 @@ app.post('/api/auth/register', async (req, res, next) => {
 
     const hash = await bcrypt.hash(password, 10);
     const { rows } = await pool.query(
-      'INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING id, name, email',
+      'INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING id, name, email, is_admin',
       [name, email, hash]
     );
     const user = rows[0];
     res.cookie('uid', String(user.id), { httpOnly: true, sameSite: 'lax' });
-    res.status(201).json(user);
+    res.status(201).json({ id: user.id, name: user.name, email: user.email, isAdmin: user.is_admin });
   } catch (err) {
     next(err);
   }
@@ -319,7 +333,7 @@ app.post('/api/auth/login', async (req, res, next) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
     res.cookie('uid', String(user.id), { httpOnly: true, sameSite: 'lax' });
-    res.json({ id: user.id, name: user.name, email: user.email });
+    res.json({ id: user.id, name: user.name, email: user.email, isAdmin: user.is_admin });
   } catch (err) {
     next(err);
   }
@@ -334,6 +348,88 @@ app.get('/api/auth/me', async (req, res, next) => {
   try {
     res.json(await currentUser(req));
   } catch (err) {
+    next(err);
+  }
+});
+
+// ---- Admin ----
+app.get('/api/admin/products', requireAdmin, async (req, res, next) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM products ORDER BY id');
+    res.json(rows.map(toProductJson));
+  } catch (err) {
+    next(err);
+  }
+});
+
+function validateProductInput(body, { partial } = { partial: false }) {
+  const fields = ['name', 'category', 'price', 'stock', 'unit', 'emoji', 'description'];
+  for (const field of fields) {
+    if (!partial && (body[field] === undefined || body[field] === null || body[field] === '')) {
+      return `${field} is required`;
+    }
+  }
+  if (body.price !== undefined && Number(body.price) < 0) return 'Price must be zero or positive';
+  if (body.stock !== undefined && Number(body.stock) < 0) return 'Stock must be zero or positive';
+  return null;
+}
+
+app.post('/api/admin/products', requireAdmin, async (req, res, next) => {
+  try {
+    const error = validateProductInput(req.body);
+    if (error) return res.status(400).json({ error });
+
+    const { name, category, price, stock, unit, emoji, description } = req.body;
+    const { rows } = await pool.query(
+      `INSERT INTO products (name, category, price, stock, unit, emoji, description)
+       VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+      [name, category, price, stock, unit, emoji, description]
+    );
+    res.status(201).json(toProductJson(rows[0]));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.patch('/api/admin/products/:id', requireAdmin, async (req, res, next) => {
+  try {
+    const error = validateProductInput(req.body, { partial: true });
+    if (error) return res.status(400).json({ error });
+
+    const { rows: existingRows } = await pool.query('SELECT * FROM products WHERE id = $1', [
+      req.params.id,
+    ]);
+    const existing = existingRows[0];
+    if (!existing) return res.status(404).json({ error: 'Product not found' });
+
+    const fields = ['name', 'category', 'price', 'stock', 'unit', 'emoji', 'description'];
+    const merged = {};
+    for (const f of fields) {
+      merged[f] = req.body[f] !== undefined ? req.body[f] : existing[f];
+    }
+
+    const { rows } = await pool.query(
+      `UPDATE products SET name=$1, category=$2, price=$3, stock=$4, unit=$5, emoji=$6, description=$7
+       WHERE id = $8 RETURNING *`,
+      [merged.name, merged.category, merged.price, merged.stock, merged.unit, merged.emoji, merged.description, req.params.id]
+    );
+    res.json(toProductJson(rows[0]));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.delete('/api/admin/products/:id', requireAdmin, async (req, res, next) => {
+  try {
+    const result = await pool.query('DELETE FROM products WHERE id = $1', [req.params.id]);
+    if (result.rowCount === 0) return res.status(404).json({ error: 'Product not found' });
+    res.status(204).end();
+  } catch (err) {
+    if (err.code === '23503') {
+      return res
+        .status(400)
+        .json({ error: 'Cannot delete a product that appears in existing orders' });
+    }
     next(err);
   }
 });

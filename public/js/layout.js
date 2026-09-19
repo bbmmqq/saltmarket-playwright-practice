@@ -2,6 +2,9 @@ function renderHeader() {
   const el = document.getElementById('site-header');
   if (!el) return;
   el.outerHTML = `
+    <div class="announcement-bar" data-testid="announcement-bar">
+      🚚 Free shipping on orders over $50 &middot; Use code <strong>SALT10</strong> for 10% off
+    </div>
     <header class="site-header">
       <a class="logo" href="/index.html">🧂 SaltMarket</a>
       <form id="search-form">
@@ -44,7 +47,11 @@ async function refreshAuthArea() {
   if (!area) return;
   const { data: user } = await api.get('/api/auth/me');
   if (user) {
+    const adminLink = user.isAdmin
+      ? `<a href="/admin.html" data-testid="admin-link">Admin</a>`
+      : '';
     area.innerHTML = `
+      ${adminLink}
       <span data-testid="account-name">Hi, ${escapeHtml(user.name)}</span>
       <button id="logout-btn" data-testid="logout-btn" class="secondary">Logout</button>
     `;
