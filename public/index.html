@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SaltMarket - Gourmet & Culinary Salts</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <h1>Shop Salt</h1>
+
+    <div class="toolbar">
+      <div class="category-filters" id="category-filters" data-testid="category-filters"></div>
+      <select id="sort-select" data-testid="sort-select">
+        <option value="">Sort: Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name-asc">Name: A to Z</option>
+      </select>
+    </div>
+
+    <p id="results-info" data-testid="results-info"></p>
+
+    <div class="product-grid" id="product-grid" data-testid="product-grid"></div>
+    <p class="empty-state" id="empty-state" data-testid="empty-state" hidden>No products match your search.</p>
+
+    <div class="pagination" id="pagination" data-testid="pagination">
+      <button id="prev-page" data-testid="pagination-prev" class="secondary">Prev</button>
+      <span id="page-indicator" data-testid="page-indicator"></span>
+      <button id="next-page" data-testid="pagination-next" class="secondary">Next</button>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>

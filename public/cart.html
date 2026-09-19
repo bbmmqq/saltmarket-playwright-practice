@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Your Cart - SaltMarket</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <h1>Your Cart</h1>
+
+    <p class="empty-state" id="empty-cart" data-testid="empty-cart-message" hidden>
+      Your cart is empty. <a href="/index.html">Continue shopping</a>.
+    </p>
+
+    <table class="cart-table" id="cart-table" data-testid="cart-table">
+      <tbody id="cart-items"></tbody>
+    </table>
+
+    <div id="cart-summary-area" hidden>
+      <div class="coupon-row">
+        <input id="coupon-input" data-testid="coupon-input" type="text" placeholder="Coupon code" />
+        <button id="apply-coupon-btn" data-testid="apply-coupon-btn" class="secondary">Apply</button>
+      </div>
+      <p class="error-text" id="coupon-error" data-testid="coupon-error" hidden></p>
+      <p class="success-text" id="coupon-applied" data-testid="coupon-applied" hidden></p>
+
+      <div class="order-summary">
+        <div class="summary-row"><span>Subtotal</span><span data-testid="subtotal" id="subtotal"></span></div>
+        <div class="summary-row" id="discount-row" data-testid="discount-row" hidden><span>Discount</span><span id="discount"></span></div>
+        <div class="summary-row"><span>Shipping</span><span data-testid="shipping" id="shipping"></span></div>
+        <div class="summary-row"><span>Tax</span><span data-testid="tax" id="tax"></span></div>
+        <div class="summary-row total"><span>Total</span><span data-testid="cart-total" id="cart-total"></span></div>
+        <button id="checkout-btn" data-testid="checkout-btn" style="width:100%;margin-top:0.8rem;">Proceed to checkout</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/cart.js"></script>
+</body>
+</html>

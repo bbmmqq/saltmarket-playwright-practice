@@ -1,0 +1,18 @@
+{
+  "name": "saltmarket",
+  "version": "1.0.0",
+  "description": "SaltMarket - a mock e-commerce store selling gourmet salt, backed by Postgres, built for Playwright test practice",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f db"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  }
+}

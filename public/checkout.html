@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Checkout - SaltMarket</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <h1>Checkout</h1>
+
+    <div class="checkout-layout">
+      <form id="checkout-form" class="stacked" novalidate>
+        <h2>Shipping details</h2>
+        <label>Full name
+          <input name="fullName" data-testid="shipping-fullName" type="text" />
+        </label>
+        <label>Email
+          <input name="email" data-testid="shipping-email" type="email" />
+        </label>
+        <label>Address
+          <input name="address" data-testid="shipping-address" type="text" />
+        </label>
+        <div class="two-col">
+          <label>City
+            <input name="city" data-testid="shipping-city" type="text" />
+          </label>
+          <label>Postal code
+            <input name="postalCode" data-testid="shipping-postalCode" type="text" />
+          </label>
+        </div>
+        <label>Country
+          <input name="country" data-testid="shipping-country" type="text" />
+        </label>
+
+        <h2>Payment</h2>
+        <label>Card number
+          <input name="cardNumber" data-testid="payment-cardNumber" type="text" placeholder="4242 4242 4242 4242" />
+        </label>
+        <div class="two-col">
+          <label>Expiry (MM/YY)
+            <input name="expiry" data-testid="payment-expiry" type="text" placeholder="12/28" />
+          </label>
+          <label>CVC
+            <input name="cvc" data-testid="payment-cvc" type="text" placeholder="123" />
+          </label>
+        </div>
+
+        <p class="error-text" id="checkout-error" data-testid="checkout-error" hidden></p>
+        <button type="submit" id="place-order-btn" data-testid="place-order-btn">Place order</button>
+      </form>
+
+      <div class="order-summary" id="order-summary" data-testid="order-summary"></div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Login - SaltMarket</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <h1>Login</h1>
+    <form id="login-form" class="stacked" novalidate>
+      <label>Email
+        <input name="email" type="email" data-testid="login-email" />
+      </label>
+      <label>Password
+        <input name="password" type="password" data-testid="login-password" />
+      </label>
+      <p class="error-text" id="login-error" data-testid="login-error" hidden></p>
+      <button type="submit" id="login-submit" data-testid="login-submit">Login</button>
+    </form>
+    <p>No account? <a href="/register.html" data-testid="go-to-register">Register</a></p>
+    <p style="color:#8a7d6b;font-size:0.85rem;">Test account: test@saltmarket.com / password123</p>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
