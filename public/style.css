@@ -85,20 +85,46 @@ header.site-header {
   flex-wrap: wrap;
 }
 
-.site-nav a, .site-nav button {
+.site-nav a {
   color: #fff;
-  background: none;
-  border: none;
   font-size: 0.95rem;
   font-weight: 500;
-  cursor: pointer;
   padding: 0.3rem 0;
   transition: opacity var(--transition);
 }
 
-.site-nav a:hover, .site-nav button:hover {
+.site-nav a:hover {
   opacity: 0.8;
   text-decoration: none;
+}
+
+#auth-area {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.account-name {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.site-nav button.secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.site-nav button.secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #fff;
 }
 
 #search-form {
@@ -356,6 +382,15 @@ button.secondary:hover:not(:disabled) {
   padding: 0.5rem 0.7rem;
   border-radius: 6px;
   display: inline-block;
+}
+
+.info-text {
+  color: var(--warn);
+  background: var(--warn-bg);
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin: 0.2rem 0;
 }
 
 .empty-state {

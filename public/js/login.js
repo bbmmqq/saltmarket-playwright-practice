@@ -2,6 +2,10 @@
   const { data: user } = await api.get('/api/auth/me');
   if (user) {
     window.location.href = qs('redirect') || dashboardUrl(user);
+    return;
+  }
+  if (qs('redirect')) {
+    document.getElementById('login-notice').hidden = false;
   }
 })();
 
