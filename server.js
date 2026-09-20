@@ -434,6 +434,29 @@ app.delete('/api/admin/products/:id', requireAdmin, async (req, res, next) => {
   }
 });
 
+app.get('/api/admin/users', requireAdmin, async (req, res, next) => {
+  try {
+    const { rows } = await pool.query('SELECT id, name, email, is_admin FROM users ORDER BY id');
+    res.json(rows.map((r) => ({ id: r.id, name: r.name, email: r.email, isAdmin: r.is_admin })));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.delete('/api/admin/users/:id', requireAdmin, async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (id === req.user.id) {
+      return res.status(400).json({ error: 'You cannot delete your own account' });
+    }
+    const result = await pool.query('DELETE FROM users WHERE id = $1', [id]);
+    if (result.rowCount === 0) return res.status(404).json({ error: 'User not found' });
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ---- Checkout ----
 app.post('/api/checkout', async (req, res, next) => {
   try {

@@ -495,7 +495,33 @@ form.stacked input:focus-visible {
   vertical-align: middle;
 }
 
+.cart-table th {
+  text-align: left;
+  padding: 0.7rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .cart-table tr:last-child td { border-bottom: none; }
+
+#admin-user-table {
+  max-width: 640px;
+  table-layout: fixed;
+}
+
+#admin-user-table th:nth-child(1),
+#admin-user-table td:nth-child(1) { width: 30%; }
+#admin-user-table th:nth-child(2),
+#admin-user-table td:nth-child(2) { width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#admin-user-table th:nth-child(3),
+#admin-user-table td:nth-child(3) { width: 15%; }
+#admin-user-table th:nth-child(4),
+#admin-user-table td:nth-child(4) { width: 15%; text-align: right; }
 
 .qty-input {
   width: 58px;
@@ -574,6 +600,83 @@ code {
   padding: 0.1rem 0.4rem;
   border-radius: 4px;
   font-size: 0.85em;
+}
+
+/* ---- Admin inline edit row ---- */
+tr.editing td {
+  background: var(--brand-light);
+}
+
+.admin-edit-input {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--ink);
+  transition: border-color var(--transition);
+}
+
+.admin-edit-input:focus-visible {
+  border-color: var(--brand);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--brand-light);
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* ---- Modal ---- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(43, 33, 24, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-box {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+  max-width: 360px;
+  width: 90%;
+}
+
+.modal-box p {
+  margin: 0 0 1.2rem;
+  font-size: 0.95rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+/* ---- Toast ---- */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  font-size: 0.9rem;
+  z-index: 200;
 }
 
 /* ---- Auth card ---- */

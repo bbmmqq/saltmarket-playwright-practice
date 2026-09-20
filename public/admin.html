@@ -62,8 +62,31 @@
         </thead>
         <tbody id="admin-product-rows"></tbody>
       </table>
+
+      <h2 style="margin-top:2rem;">Users</h2>
+      <p class="error-text" id="admin-user-table-error" data-testid="admin-user-table-error" hidden></p>
+      <table class="cart-table" id="admin-user-table" data-testid="admin-user-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Email</th><th>Role</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="admin-user-rows"></tbody>
+      </table>
     </div>
   </main>
+
+  <div id="confirm-modal" class="modal-overlay" data-testid="confirm-modal" hidden>
+    <div class="modal-box">
+      <p id="confirm-modal-message" data-testid="confirm-modal-message"></p>
+      <div class="modal-actions">
+        <button type="button" class="secondary" id="confirm-modal-cancel" data-testid="confirm-modal-cancel">Cancel</button>
+        <button type="button" id="confirm-modal-confirm" data-testid="confirm-modal-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" data-testid="toast" hidden></div>
 
   <div id="site-footer"></div>
 

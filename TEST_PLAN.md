@@ -115,6 +115,10 @@ Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo forma
 | ADM-06 | P2 | cancelling edit discards changes | Bấm Cancel khi đang edit → không lưu thay đổi |
 | ADM-07 | P0 | deleting an unordered product removes it everywhere | Delete sản phẩm chưa từng nằm trong order nào → biến mất khỏi bảng + catalog |
 | ADM-08 | P1 | deleting a product referenced by an order is blocked | Delete sản phẩm đã nằm trong 1 order (đặt hàng xong rồi mới xoá) → lỗi "Cannot delete a product that appears in existing orders", sản phẩm không bị xoá |
+| ADM-09 | P0 | admin can view and delete a user | Admin vào trang admin → thấy `admin-user-table` liệt kê đủ user seed, xoá 1 user thường → biến mất khỏi bảng |
+| ADM-10 | P1 | admin cannot delete their own account | Ở dòng của chính admin đang login → không hiện nút `admin-delete-user-btn` (và nếu gọi thẳng API thì trả lỗi "You cannot delete your own account") |
+| ADM-11 | P1 | deleting a product or user shows a custom confirm modal | Bấm Delete (product hoặc user) → hiện `confirm-modal`; Cancel thì không xoá, Confirm thì xoá — không dùng `window.confirm` native |
+| ADM-12 | P2 | adding or saving a product shows a success toast | Add product thành công hoặc Save khi đang edit → `toast` hiện đúng message ("Product added." / "Product updated.") rồi tự ẩn |
 
 ## 9. `api.spec.ts`
 

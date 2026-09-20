@@ -90,8 +90,10 @@ Wipes the database (cart, orders, registered users, product stock) and re-seeds 
 | POST | `/api/admin/products` | *(admin only)* Create a product |
 | PATCH | `/api/admin/products/:id` | *(admin only)* Update a product |
 | DELETE | `/api/admin/products/:id` | *(admin only)* Delete a product (fails with 400 if it appears in existing orders) |
+| GET | `/api/admin/users` | *(admin only)* List all users |
+| DELETE | `/api/admin/users/:id` | *(admin only)* Delete a user (fails with 400 if you try to delete your own account) |
 
-The whole storefront requires being logged in — visiting any shop page while logged out redirects to `/login.html?redirect=<original path>`, and logging in sends you back there. The cart itself is still tracked per-browser via an `sid` cookie, but the pages that expose it are all auth-gated client-side (the API layer is not; see note below). Admin routes are gated server-side by the logged-in user's `is_admin` flag — a non-admin gets a `403`.
+Browsing the catalog (`/index.html`, `/product.html`) works without logging in. The cart, checkout, and confirmation pages require being logged in — visiting them while logged out redirects to `/login.html?redirect=<original path>`, and logging in sends you back there. The cart itself is still tracked per-browser via an `sid` cookie, but the pages that expose it are auth-gated client-side (the API layer is not; see note below). Admin routes are gated server-side by the logged-in user's `is_admin` flag — a non-admin gets a `403`.
 
 > **Note:** the login wall is enforced client-side (each shop page checks `/api/auth/me` on load and redirects if logged out). The underlying `/api/products`, `/api/cart`, etc. endpoints are not themselves auth-gated — this mirrors how a lot of real single-page apps enforce "must be logged in" at the UI layer. Keep that in mind if you write API-level Playwright tests: hitting the REST endpoints directly still works without a session.
 
@@ -107,9 +109,11 @@ Every interactive element carries a `data-testid` so Playwright locators don't d
 | Cart | `cart-table`, `cart-item`, `cart-item-name`, `cart-item-price`, `qty-input`, `cart-item-line-total`, `remove-btn`, `coupon-input`, `apply-coupon-btn`, `coupon-error`, `coupon-applied`, `subtotal`, `discount-row`, `shipping`, `tax`, `cart-total`, `checkout-btn`, `empty-cart-message` |
 | Checkout | `shipping-fullName`, `shipping-email`, `shipping-address`, `shipping-city`, `shipping-postalCode`, `shipping-country`, `payment-cardNumber`, `payment-expiry`, `payment-cvc`, `checkout-error`, `place-order-btn`, `order-summary` |
 | Confirmation | `confirmation-title`, `order-id`, `order-total`, `continue-shopping-link` |
-| Login | `login-email`, `login-password`, `login-submit`, `login-error`, `go-to-register` |
+| Login | `login-email`, `login-password`, `login-submit`, `login-error`, `login-notice`, `go-to-register` |
 | Register | `register-name`, `register-email`, `register-password`, `register-confirm`, `register-submit`, `register-error`, `go-to-login` |
-| Admin | `admin-link` (header), `admin-denied`, `admin-add-form`, `admin-add-name`, `admin-add-category`, `admin-add-price`, `admin-add-stock`, `admin-add-unit`, `admin-add-emoji`, `admin-add-description`, `admin-add-submit`, `admin-add-error`, `admin-add-success`, `admin-product-table`, `admin-product-row`, `admin-product-name`, `admin-product-price`, `admin-product-stock`, `admin-edit-btn`, `admin-edit-name`, `admin-edit-category`, `admin-edit-price`, `admin-edit-stock`, `admin-edit-unit`, `admin-save-btn`, `admin-cancel-btn`, `admin-delete-btn`, `admin-table-error` |
+| Admin (products) | `admin-link` (header), `admin-denied`, `admin-add-form`, `admin-add-name`, `admin-add-category`, `admin-add-price`, `admin-add-stock`, `admin-add-unit`, `admin-add-emoji`, `admin-add-description`, `admin-add-submit`, `admin-add-error`, `admin-add-success`, `admin-product-table`, `admin-product-row`, `admin-product-name`, `admin-product-price`, `admin-product-stock`, `admin-edit-btn`, `admin-edit-name`, `admin-edit-category`, `admin-edit-price`, `admin-edit-stock`, `admin-edit-unit`, `admin-save-btn`, `admin-cancel-btn`, `admin-delete-btn`, `admin-table-error` |
+| Admin (users) | `admin-user-table`, `admin-user-row`, `admin-user-name`, `admin-user-email`, `admin-user-role`, `admin-delete-user-btn`, `admin-user-table-error` |
+| Admin (shared) | `confirm-modal`, `confirm-modal-message`, `confirm-modal-cancel`, `confirm-modal-confirm` (used by both product and user delete), `toast` (shown after adding/editing a product) |
 
 ## Suggested first tests
 
