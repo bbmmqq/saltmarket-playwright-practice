@@ -52,7 +52,7 @@ async function refreshAuthArea() {
       : '';
     area.innerHTML = `
       ${adminLink}
-      <span data-testid="account-name">Hi, ${escapeHtml(user.name)}</span>
+      <span class="account-name" data-testid="account-name">Hi, ${escapeHtml(user.name)}</span>
       <button id="logout-btn" data-testid="logout-btn" class="secondary">Logout</button>
     `;
     document.getElementById('logout-btn').addEventListener('click', async () => {

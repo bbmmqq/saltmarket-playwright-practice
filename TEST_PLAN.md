@@ -6,7 +6,7 @@ Danh sách test case cho SaltMarket, chia theo module (map 1-1 với file spec t
 
 Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo format `"<ID>: <tên>"` — ví dụ `test('AUTH-01: login with valid seeded user shows logged-in header', ...)`.
 
-## 1. `auth.spec.js`
+## 1. `auth.spec.ts`
 
 | ID | P | Tên test case | Case |
 |---|---|---|---|
@@ -18,21 +18,22 @@ Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo forma
 | AUTH-06 | P1 | register with short password shows error | Register password < 6 ký tự → lỗi "at least 6 characters" |
 | AUTH-07 | P2 | register with missing required field shows error | Register thiếu field bắt buộc (name/email/password) → lỗi |
 | AUTH-08 | P0 | logout clears session and redirects to login | Logout → session clear, vào lại trang shop bị đá về login |
-| AUTH-09 | P2 | auth me returns null when logged out | `GET /api/auth/me` khi chưa login → trả `null` |
 
-## 2. `access-control.spec.js`
+## 2. `access-control.spec.ts`
 
 | ID | P | Tên test case | Case |
 |---|---|---|---|
 | GUARD-01 | P0 | visiting cart while logged out redirects to login with redirect param | Vào `/cart.html` khi chưa login → redirect `/login.html?redirect=/cart.html` |
 | GUARD-02 | P0 | login from redirect returns to originally requested page | Login xong từ redirect → quay lại đúng trang ban đầu (`/cart.html`) |
-| GUARD-03 | P1 | shop pages redirect to login when logged out | Lặp lại GUARD-01 cho `/checkout.html`, `/index.html`, `/product.html?id=` |
+| GUARD-03 | P1 | checkout and confirmation pages redirect to login when logged out | Lặp lại GUARD-01 cho `/checkout.html`, `/confirmation.html` |
 | GUARD-04 | P1 | shop API endpoints respond without a session | Gọi thẳng API (`GET /api/products`, `/api/cart`) khi không có session → vẫn trả data (login wall chỉ ở client) — test API-level riêng |
 | GUARD-05 | P0 | non-admin visiting admin page sees access denied | User thường (non-admin) vào `/admin.html` → hiện `admin-denied`, không render bảng sản phẩm |
 | GUARD-06 | P1 | non-admin calling admin API gets 403 | User thường gọi thẳng `POST/GET /api/admin/products` → `403` |
 | GUARD-07 | P0 | admin can load admin page and sees admin link | Admin login → `/admin.html` load được bảng sản phẩm, thấy `admin-link` ở header |
+| GUARD-08 | P0 | browsing catalog and product pages works without login | Vào `/index.html` hoặc `/product.html?id=` khi chưa login → xem bình thường, không bị redirect |
+| GUARD-09 | P1 | login page shows a notice when redirected from cart | Bị đá về `/login.html?redirect=/cart.html` → hiện `login-notice` "Please login to view your cart." |
 
-## 3. `catalog.spec.js`
+## 3. `catalog.spec.ts`
 
 | ID | P | Tên test case | Case |
 |---|---|---|---|
@@ -51,7 +52,7 @@ Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo forma
 | CAT-13 | P2 | low-stock product shows low-stock badge | Sản phẩm sắp hết hàng (Black Truffle Salt) → `stock-badge` báo low stock |
 | CAT-14 | P0 | adding product from catalog updates cart badge | Add to cart từ catalog card → `cart-badge` tăng đúng số |
 
-## 4. `product-detail.spec.js`
+## 4. `product-detail.spec.ts`
 
 | ID | P | Tên test case | Case |
 |---|---|---|---|
@@ -61,7 +62,7 @@ Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo forma
 | PDP-04 | P2 | zero or negative quantity is blocked | Nhập qty 0 hoặc âm → bị chặn / disable submit |
 | PDP-05 | P2 | invalid product id shows error state | Truy cập `product.html?id=` với id không tồn tại → xử lý lỗi (404/empty state) |
 
-## 5. `cart.spec.js`
+## 5. `cart.spec.ts`
 
 | ID | P | Tên test case | Case |
 |---|---|---|---|
@@ -78,7 +79,7 @@ Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo forma
 | CART-11 | P1 | discounted subtotal under $50 charges shipping fee | Subtotal sau discount < $50 → `shipping` = $5.99 |
 | CART-12 | P2 | empty cart shows empty state and blocks checkout | Cart rỗng → `empty-cart-message`, không cho checkout |
 
-## 6. `checkout.spec.js`
+## 6. `checkout.spec.ts`
 
 | ID | P | Tên test case | Case |
 |---|---|---|---|
@@ -94,7 +95,7 @@ Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo forma
 | CHK-10 | P1 | successful checkout decrements product stock | Sau khi đặt hàng thành công → stock bị trừ đúng số lượng |
 | CHK-11 | P1 | successful checkout clears cart and coupon | Sau khi đặt hàng → cart và coupon bị clear |
 
-## 7. `order-confirmation.spec.js`
+## 7. `order-confirmation.spec.ts`
 
 | ID | P | Tên test case | Case |
 |---|---|---|---|
@@ -102,7 +103,7 @@ Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo forma
 | CONF-02 | P2 | invalid order id shows error state | Vào `/confirmation.html?orderId=` với id không tồn tại → xử lý lỗi |
 | CONF-03 | P2 | continue shopping link returns to catalog | Link "Continue shopping" → quay về catalog |
 
-## 8. `admin-products.spec.js`
+## 8. `admin-products.spec.ts`
 
 | ID | P | Tên test case | Case |
 |---|---|---|---|
@@ -114,3 +115,11 @@ Cột **Tên test case** dùng làm tên hàm `test(...)` trong code, theo forma
 | ADM-06 | P2 | cancelling edit discards changes | Bấm Cancel khi đang edit → không lưu thay đổi |
 | ADM-07 | P0 | deleting an unordered product removes it everywhere | Delete sản phẩm chưa từng nằm trong order nào → biến mất khỏi bảng + catalog |
 | ADM-08 | P1 | deleting a product referenced by an order is blocked | Delete sản phẩm đã nằm trong 1 order (đặt hàng xong rồi mới xoá) → lỗi "Cannot delete a product that appears in existing orders", sản phẩm không bị xoá |
+
+## 9. `api.spec.ts`
+
+Test thuần API (dùng `request` fixture, không cần `page`) — không thuộc UI flow nào nên tách riêng khỏi các suite trên.
+
+| ID | P | Tên test case | Case |
+|---|---|---|---|
+| API-01 | P2 | auth me returns null when logged out | `GET /api/auth/me` khi chưa có session → trả `null` |
