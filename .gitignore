@@ -8,3 +8,7 @@ npm-debug.log*
 
 .env
 .env.local
+
+# Playwright
+/blob-report/
+/playwright/.auth/
