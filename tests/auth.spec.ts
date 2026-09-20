@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../page-objects/loginPage';
+
 
 test('AUTH-01: login with valid seeded user shows logged-in header', async ({ page }) => {
-  await page.goto('/login.html');
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
 
-  await page.getByTestId('login-email').fill('test@saltmarket.com');
-  await page.getByTestId('login-password').fill('password123');
-  await page.getByTestId('login-submit').click();
+  await loginPage.login('test@saltmarket.com', 'password123');
 
   await expect(page).toHaveURL('/index.html');
   await expect(page.getByTestId('account-name')).toHaveText('Hi, Test User');
@@ -13,11 +14,10 @@ test('AUTH-01: login with valid seeded user shows logged-in header', async ({ pa
 });
 
 test('AUTH-02: login with invalid credentials shows error message', async ({ page }) => {
-  await page.goto('/login.html');
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
 
-  await page.getByTestId('login-email').fill('invalid@example.com');
-  await page.getByTestId('login-password').fill('wrongpassword');
-  await page.getByTestId('login-submit').click();
+  await loginPage.login('invalid@example.com', 'wrongpassword');
 
   await expect(page.getByTestId('login-error')).toBeVisible();
 });
@@ -33,6 +33,17 @@ test('AUTH-03: Register new user redirects to shop as logged in', async ({page})
 
   await expect(page).toHaveURL('/index.html');
   await expect(page.getByTestId('account-name')).toHaveText('Hi, New User');
+
+  await page.getByTestId('logout-btn').click();
+  await page.waitForURL('/login.html');
+
+  const loginPage = new LoginPage(page);
+  await loginPage.login('admin@saltmarket.com', 'admin123');
+  await page.waitForURL('/admin.html');
+
+  const userRow = page.getByTestId('admin-user-row').filter({ hasText: 'newuser@example.com' });
+  await userRow.getByTestId('admin-delete-user-btn').click();
+  await page.getByTestId('confirm-modal-confirm').click();
 });
 
 test('AUTH-04: Register with invalid email format shows error', async ({page}) =>  {
@@ -84,11 +95,10 @@ test('AUTH-07: Register with missing required field shows error', async ({page})
 });
 
 test('AUTH-08: Logout redirects to login page and clears session', async ({ page }) => {
-  await page.goto('/login.html');
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
 
-  await page.getByTestId('login-email').fill('test@saltmarket.com');
-  await page.getByTestId('login-password').fill('password123');
-  await page.getByTestId('login-submit').click();
+  await loginPage.login('test@saltmarket.com', 'password123');
 
   await expect(page).toHaveURL('/index.html');
   await expect(page.getByTestId('account-name')).toHaveText('Hi, Test User');
